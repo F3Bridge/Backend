@@ -43,7 +43,7 @@ export class DiscordController {
         this.clientId
       }&redirect_uri=${encodeURIComponent(
         this.redirectUrl,
-      )}&response_type=code&scope=identify`,
+      )}&response_type=code&scope=identify%20relationships.read`,
     };
   }
 
