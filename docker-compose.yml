@@ -26,6 +26,8 @@ services:
       - TYPEORM_LOGGING=true
       - TYPEORM_ENTITIES=dist/**/*.entity.ts,dist/**/*.entity.js
       - REDIS_HOST=redis
+      - JWT_SECRET=a$$a$$123123
+      - JWT_EXPIRE_TIME=10m
     volumes:
       - ./:/opt
   database:
