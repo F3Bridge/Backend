@@ -1,0 +1,55 @@
+version: '3.1'
+
+services:
+  backend:
+    image: node:16.14.0-alpine3.15
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+      - redis
+    entrypoint: ['/bin/sh', '-c']
+    command:
+      - |
+        cd opt
+        npm run start:dev
+    env_file:
+      - ./.env
+    environment:
+      - NODE_ENV=production
+      - TYPEORM_CONNECTION=mysql
+      - TYPEORM_HOST=database
+      - TYPEORM_USERNAME=f3bridge
+      - TYPEORM_PASSWORD=f3bridge
+      - TYPEORM_DATABASE=f3bridge
+      - TYPEORM_SYNCHRONIZE=true
+      - TYPEORM_LOGGING=true
+      - TYPEORM_ENTITIES=dist/**/*.entity.ts,dist/**/*.entity.js
+      - REDIS_HOST=redis
+    volumes:
+      - ./:/opt
+  database:
+    image: mariadb
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: donotusetherootaccount
+      MYSQL_USER: f3bridge
+      MYSQL_PASSWORD: f3bridge
+      MYSQL_DATABASE: f3bridge
+  redis:
+    image: redis
+    restart: always
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8081:80
+    environment:
+      - PMA_HOST=database
+      - PMA_USER=f3bridge
+      - PMA_PASSWORD=f3bridge
+      - PMA_CONTROLUSER=root
+      - PMA_CONTROLPASS=donotusetherootaccount
