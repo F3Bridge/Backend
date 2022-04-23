@@ -12,6 +12,12 @@ export class UsersController {
     return this.usersService.findOneOrFail(user.walletAddress);
   }
 
+  @Get('/by-discord/:discordHandle')
+  @Public()
+  findOneByDiscord(@Param('discordHandle') discordHandle: string) {
+    return this.usersService.findOneByDiscordHandleOrFail(discordHandle);
+  }
+
   @Get('/:walletAddress')
   @Public()
   findOne(@Param('walletAddress') walletAddress: string) {

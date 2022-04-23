@@ -14,6 +14,9 @@ export class User {
   @Column({ nullable: true })
   refreshToken: string;
 
+  @Column({ nullable: true })
+  discordHandle: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

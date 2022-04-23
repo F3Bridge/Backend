@@ -13,6 +13,7 @@ import { ConfigKeys } from './config-keys.const';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DiscordModule } from './discord/discord.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TypeOrmModule.forRoot(),
     AuthModule,
     UsersModule,
+    DiscordModule,
   ],
   providers: [
     {
