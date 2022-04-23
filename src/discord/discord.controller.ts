@@ -14,21 +14,27 @@ import { DiscordOauthResponse } from './interfaces/discord-oauth-response.interf
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/auth/decorators/user.decorator';
 import { UserSession } from 'src/auth/interfaces/user-session.interface';
+import { ConfigService } from '@nestjs/config';
+import { ConfigKeys } from 'src/config-keys.const';
 
 @Controller({ path: 'discord', version: '1' })
 export class DiscordController {
   private readonly discordAuthorizeUrl =
     'https://discord.com/api/oauth2/authorize';
   private readonly discordTokenUrl = 'https://discord.com/api/oauth2/token';
-  private readonly clientId = '967381507197001728';
-  private readonly clientSecret = 'MtNbcZzZzTedIkQISyAjBruf4obgUopy';
-  private readonly redirectUrl =
-    'http://localhost:8080/api/v1/discord/callback';
+  private readonly clientId: string;
+  private readonly clientSecret: string;
+  private readonly redirectUrl: string;
 
   constructor(
+    private configService: ConfigService,
     private httpService: HttpService,
     private usersService: UsersService,
-  ) {}
+  ) {
+    this.clientId = this.configService.get(ConfigKeys.DiscordClientId);
+    this.clientSecret = this.configService.get(ConfigKeys.DiscordClientSecret);
+    this.redirectUrl = this.configService.get(ConfigKeys.DiscordRedirectUrl);
+  }
 
   @Get()
   oauthRedirect(): RedirectUrlDto {
