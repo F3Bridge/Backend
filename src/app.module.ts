@@ -14,6 +14,7 @@ import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DiscordModule } from './discord/discord.module';
+import { EntityNotFoundInterceptor } from './common/interceptors/entity-not-found.interceptor';
 
 @Module({
   imports: [
@@ -37,6 +38,10 @@ import { DiscordModule } from './discord/discord.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: EntityNotFoundInterceptor,
     },
     { provide: APP_PIPE, useValue: new ValidationPipe({ whitelist: true }) },
   ],
