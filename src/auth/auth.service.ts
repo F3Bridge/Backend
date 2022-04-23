@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Cache } from 'cache-manager';
+import { createHash } from 'crypto';
 import { ethers, utils } from 'ethers';
 import { nanoid } from 'nanoid';
 import { UsersService } from 'src/users/users.service';
@@ -64,8 +65,7 @@ export class AuthService {
     } catch (e) {
       throw new UnauthorizedException();
     }
-    // TODO: uncomment
-    // await this.cacheManager.del(cacheKey);
+    await this.cacheManager.del(cacheKey);
     if (!(await this.usersService.findOne(walletAddress))) {
       await this.usersService.create(walletAddress);
     }
@@ -80,7 +80,7 @@ export class AuthService {
 
   async refresh(refreshToken: string) {
     const user = await this.usersService.findOneByRefreshTokenOrFail(
-      refreshToken,
+      createHash('sha256').update(refreshToken).digest('hex'),
     );
     return this.signJwtFor(user.walletAddress);
   }
