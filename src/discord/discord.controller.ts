@@ -43,7 +43,7 @@ export class DiscordController {
         this.clientId
       }&redirect_uri=${encodeURIComponent(
         this.redirectUrl,
-      )}&response_type=code&scope=identify%20relationships.read`,
+      )}&response_type=code&scope=identify`,
     };
   }
 
@@ -77,6 +77,16 @@ export class DiscordController {
         user.walletAddress,
         discordUser.data.username + '#' + discordUser.data.discriminator,
       );
+
+      const discordRelations = await firstValueFrom(
+        this.httpService.get('https://discord.com/api/users/@me/relations', {
+          headers: {
+            authorization: `${oauthResponse.data.token_type} ${oauthResponse.data.access_token}`,
+          },
+        }),
+      );
+
+      console.log(discordRelations);
     } catch (e) {
       if (
         e.response.data &&
